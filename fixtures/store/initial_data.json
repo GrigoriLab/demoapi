@@ -1,0 +1,30 @@
+[
+{
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$838trmdgQUo8BXNxnZh1WW$8IjtofqCe3KNbEV7N/G7bNAYlqsgSJw1aGViEAj0IbA=",
+        "last_login": null,
+        "is_superuser": true,
+        "username": "grigori",
+        "first_name": "",
+        "last_name": "",
+        "email": "grigori.kartashyan@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2022-03-20T10:56:31.489Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "store.product",
+    "pk": 1,
+    "fields": {
+        "name": "Test product",
+        "price": 99.0,
+        "description": "test product description",
+        "created_at": "2022-03-20T10:58:46.806Z"
+    }
+}
+]
