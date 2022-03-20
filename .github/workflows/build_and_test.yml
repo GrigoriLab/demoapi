@@ -1,0 +1,15 @@
+name: Build docker image and run testcases
+on:
+  push:
+    branches:
+      - main
+jobs:
+  Run-Tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Build Docker image
+        run: docker build -t test_image .
+      - name: Test API
+        run: docker run --rm test_image python manage.py test apps.api
