@@ -26,7 +26,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: demo_api
-          IMAGE_TAG: demo_api_image
+#          IMAGE_TAG: $(echo ${{ github.sha }} | head -c 7)
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo ${{ github.sha }} | head -c 3 | xargs -I{} docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:{} .
+          echo ${{ github.sha }} | head -c 3 | xargs -I{} docker push $ECR_REGISTRY/$ECR_REPOSITORY:{}
