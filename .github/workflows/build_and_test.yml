@@ -42,9 +42,9 @@ jobs:
       - name: Trigger deploy
         uses: Consensys/kubernetes-action@master
         env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_BASE_64_ENCODED }}
         with:
-          args: apply deployment.yaml
+          args: apply -f deployment.yaml
       #- name: Deploy new docker image
       #  uses: tuongaz/kubctl-eks-action
       #  env:
