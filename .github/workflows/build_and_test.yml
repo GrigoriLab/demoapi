@@ -4,7 +4,7 @@ on:
     branches:
       - main
 jobs:
-  Run-Tests:
+  RunTestsAndDeploy:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
