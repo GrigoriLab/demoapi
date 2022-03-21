@@ -35,6 +35,7 @@ jobs:
           docker build -t $IMAGE_URL .
           docker run --rm $IMAGE_URL python manage.py test apps.api
           docker push $IMAGE_URL
+          mkdir -p ~/.kube
           echo "${{ env.KUBE_CONFIG_DATA }}" > ~/.kube/config
           sed -e 's/IMAGE_URL/${IMAGE_URL}/g' deployment.yaml
       - name: Deploy Kubernetes
