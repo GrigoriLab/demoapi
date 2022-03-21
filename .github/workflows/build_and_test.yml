@@ -18,17 +18,26 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      - name: Build, test, tag, and push demo api image to Amazon ECR
-        id: buidl-test-push
+      - name: Build & Push Image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: demo_api
         run: |
           IMAGE_TAG=$(echo ${{ github.sha }} | head -c 7)
-          IMAGE_URL=$ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG
-          docker build -t $IMAGE_URL .
-          docker run --rm $IMAGE_URL python manage.py test apps.api
-          docker push $IMAGE_URL
+          IMAGE_URL=$ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${IMAGE_TAG}
+          docker buildx create --use
+          docker buildx build \
+            --cache-from=type=local,src=/tmp/.buildx-cache \
+            --cache-to=type=local,dest=/tmp/.buildx-cache-new \
+            --tag test_image \
+            --target release \
+            --load \
+            .
+          docker run --rm test_image python manage.py test apps.api
+          docker image tag test_image:latest ${IMAGE_URL}
+          docker push ${IMAGE_URL}
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
           sed -i"" -e 's,'IMAGE_URL','"${IMAGE_URL}"',' deployment.yaml
       - name: Trigger deploy
         uses: resemble-ai/kubernetes-action@master
