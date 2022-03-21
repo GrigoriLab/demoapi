@@ -37,7 +37,7 @@ jobs:
           docker run --rm $IMAGE_URL python manage.py test apps.api
           docker push $IMAGE_URL
           echo '::set-output name=IMAGE_URL::$IMAGE_URL'
-          sed -i'' -e "s/IMAGE_URL/${IMAGE_URL}/g" deployment.yaml
+          sed -i"" -e 's,'IMAGE_URL','"${IMAGE_URL}"',' deployment.yaml
 #          mkdir -p ~/.kube
 #          echo "${{ env.KUBE_CONFIG_DATA }}" > ~/.kube/config
 
