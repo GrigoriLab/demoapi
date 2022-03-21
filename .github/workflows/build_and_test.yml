@@ -35,18 +35,25 @@ jobs:
           docker build -t $IMAGE_URL .
           docker run --rm $IMAGE_URL python manage.py test apps.api
           docker push $IMAGE_URL
+          sed -e 's/IMAGE_URL/${IMAGE_URL}/g' deployment.yaml
 #          mkdir -p ~/.kube
 #          echo "${{ env.KUBE_CONFIG_DATA }}" > ~/.kube/config
-#          sed -e 's/IMAGE_URL/${IMAGE_URL}/g' deployment.yaml
-      - name: Deploy new docker image
-        uses: tuongaz/kubctl-eks-action
+
+      - name: Trigger deploy
+        uses: Consensys/kubernetes-action@master
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_BASE_64_ENCODED }}
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: set image --record deployment/pod-name pod-name=844540777587.dkr.ecr.us-west-2.amazonaws.com/demo_api:3df2fa4
+          args: apply deployment.yaml
+      #- name: Deploy new docker image
+      #  uses: tuongaz/kubctl-eks-action
+      #  env:
+      #    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #    AWS_REGION: ${{ secrets.AWS_REGION }}
+      #    KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_BASE_64_ENCODED }}
+      #  with:
+      #    args: set image --record deployment/pod-name pod-name=844540777587.dkr.ecr.us-west-2.amazonaws.com/demo_api:3df2fa4
       #- name: Deploy Kubernetes
       #  run: |
       #    kubectl apply -f deployment.yaml
