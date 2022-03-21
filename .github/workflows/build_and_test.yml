@@ -28,5 +28,6 @@ jobs:
           ECR_REPOSITORY: demo_api
 #          IMAGE_TAG: $(echo ${{ github.sha }} | head -c 7)
         run: |
-          echo ${{ github.sha }} | head -c 3 | xargs -I{} docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:{} .
-          echo ${{ github.sha }} | head -c 3 | xargs -I{} docker push $ECR_REGISTRY/$ECR_REPOSITORY:{}
+          IMAGE_TAG=$(echo ${{ github.sha }} | head -c 7)
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
