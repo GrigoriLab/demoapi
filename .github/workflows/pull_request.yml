@@ -6,7 +6,7 @@ on:
   pull_request:
     types: [ opened, reopened ]
 jobs:
-  Run-Tests:
+  TestPullRequest:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
