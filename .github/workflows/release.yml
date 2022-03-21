@@ -1,4 +1,4 @@
-name: Build docker image and run testcases
+name: Build docker image, run testcases and deploy to EKS
 on:
   push:
     branches:
